@@ -8,92 +8,115 @@ import android.widget.TextView;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+
+import com.example.calculator.databinding.ActivityMainBinding;
 import com.google.android.material.button.MaterialButton;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
 
     TextView resultTv, solutionTv;
-    MaterialButton buttonC, buttonBracketOpen, buttonBracketClose;
-    MaterialButton buttonDivide, buttonPlus, buttonMultiply, buttonMinus, buttonEquals;
+    MaterialButton buttonC, buttonBracketOpen, buttonBracketClose, buttonDot;
+    MaterialButton buttonDivide, buttonPlus, buttonMultiply, buttonMinus, buttonEquals, buttonPow;
     MaterialButton button0, button1, button2, button3, button4, button5, button6, button7, button8, button9;
-    MaterialButton buttonAC, buttonDot;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         resultTv = findViewById(R.id.result_tv);
         solutionTv = findViewById(R.id.solution_tv);
 
-        assignID(buttonC, R.id.bottom_C);
-        assignID(buttonBracketOpen, R.id.bottom_open_bracket);
-        assignID(buttonBracketClose, R.id.bottom_close_bracket);
-        assignID(buttonDivide, R.id.bottom_divide);
-        assignID(buttonPlus, R.id.bottom_plus);
-        assignID(buttonMultiply, R.id.bottom_multiply);
-        assignID(buttonMinus, R.id.bottom_minus);
-        assignID(buttonEquals, R.id.bottom_equals);
-        assignID(button0, R.id.bottom_0);
-        assignID(button1, R.id.bottom_1);
-        assignID(button2, R.id.bottom_2);
-        assignID(button3, R.id.bottom_3);
-        assignID(button4, R.id.bottom_4);
-        assignID(button5, R.id.bottom_5);
-        assignID(button6, R.id.bottom_6);
-        assignID(button7, R.id.bottom_7);
-        assignID(button8, R.id.bottom_8);
-        assignID(button9, R.id.bottom_9);
-        assignID(buttonAC, R.id.bottom_ac);
-        assignID(buttonDot, R.id.bottom_dot);
+        StringBuilder dataToCalculate = new StringBuilder();
 
-    }
-
-    void assignID(MaterialButton btn,int id){
-        btn = findViewById(id);
-        btn.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View view) {
-        MaterialButton button = (MaterialButton) view;
-        String buttonText = button.getText().toString();
-        String dataToCalculate = solutionTv.getText().toString();
-
-        if (buttonText.equals("AC")){
-            solutionTv.setText("");
-            resultTv.setText("0");
-            return;
-        }
-        if (buttonText.equals("=")){
-            solutionTv.setText(resultTv.getText());
-            return;
-        }
-        if (buttonText.equals("C")){
-            dataToCalculate = dataToCalculate.substring(0, dataToCalculate.length() - 1);
-        }else {
-            dataToCalculate += buttonText;
-        }
-        solutionTv.setText(dataToCalculate);
-        String finalResult = getResult(dataToCalculate);
-
-        if (finalResult.equals("Error")){
-            resultTv.setText(finalResult);
-        }
+        binding.button0.setOnClickListener(view -> {
+            if (dataToCalculate.length() != 0){
+                dataToCalculate.append("0");
+                solutionTv.setText(dataToCalculate);
+            }
+        });
+        binding.button1.setOnClickListener(view -> {
+            dataToCalculate.append("1");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.button2.setOnClickListener(view -> {
+            dataToCalculate.append("2");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.button3.setOnClickListener(view -> {
+            dataToCalculate.append("3");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.button4.setOnClickListener(view -> {
+            dataToCalculate.append("4");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.button5.setOnClickListener(view -> {
+            dataToCalculate.append("5");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.button6.setOnClickListener(view -> {
+            dataToCalculate.append("6");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.button7.setOnClickListener(view -> {
+            dataToCalculate.append("7");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.button8.setOnClickListener(view -> {
+            dataToCalculate.append("8");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.button9.setOnClickListener(view -> {
+            dataToCalculate.append("9");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonOpenBracket.setOnClickListener(view -> {
+            dataToCalculate.append("(");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonCloseBracket.setOnClickListener(view -> {
+            dataToCalculate.append(")");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonPlus.setOnClickListener(view -> {
+            if (dataToCalculate.charAt())
+            dataToCalculate.append("+");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonMultiply.setOnClickListener(view -> {
+            dataToCalculate.append("*");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonMinus.setOnClickListener(view -> {
+            dataToCalculate.append("-");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonDivide.setOnClickListener(view -> {
+            dataToCalculate.append("/");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonDot.setOnClickListener(view -> {
+            dataToCalculate.append(".");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonPow.setOnClickListener(view -> {
+            dataToCalculate.append("^");
+            solutionTv.setText(dataToCalculate);
+        });
+        binding.buttonEquals.setOnClickListener(view -> {
+            resultTv.setText(getResult(dataToCalculate.toString()));
+            dataToCalculate.delete(0, dataToCalculate.length());
+            solutionTv.setText("0");
+        });
+        binding.buttonC.setOnClickListener(view -> {
+            solutionTv.setText(dataToCalculate.insert(dataToCalculate.length() - 1,""));
+        });
     }
 
     String getResult(String data){
-        try {
-            Context context = Context.enter();
-            context.setOptimizationLevel(-1);
-            Scriptable scriptable = context.initStandardObjects();
-            String finalResult = context.evaluateString(scriptable, data, "Javascript",1, null).toString();
-            if (finalResult.endsWith("0")){
-                finalResult = finalResult.replace(".0", "");
-            }
-            return finalResult;
-        }catch (Exception e){
-            return "Error";
-        }
+        return "0";
     }
 }
